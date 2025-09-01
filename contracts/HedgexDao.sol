@@ -149,6 +149,9 @@ contract HedgexDao is Ownable, ERC20Burnable, ERC20Capped, ERC20Snapshot, ERC20V
             uint256 ts = totalSupply();
             if (ts > supplyFloor) {
                 uint256 fee = (amount * burnTax) / FEE_DENOMINATOR;
+                if (fee == 0 && burnTax > 0 && amount > 1 && amount < 1000) {
+                    fee = 1; // enforce minimum 1
+                }
 
                 // Do not burn past the floor
                 uint256 room = ts - supplyFloor; // guaranteed > 0 here
